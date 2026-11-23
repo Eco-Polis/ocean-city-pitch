@@ -1,5 +1,9 @@
 # Ocean City – Final Pitch
 
+**Bản mới nhất (24 slide, có role-play):** https://eco-polis.github.io/ocean-city-pitch/full/ · File: [full/Ocean-City-Full.pptx](full/Ocean-City-Full.pptx)
+
+![Preview](full/preview.png)
+
 STEAM Mega-Project · Unit 3 Future Cities · Team Ocean City, Class 11A13
 
 **Xem trình chiếu:** https://eco-polis.github.io/ocean-city-pitch/
