@@ -1,0 +1,240 @@
+<!doctype html>
+<html lang="vi">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Ocean City – Style Test</title>
+<style>
+:root{--t:#8A4B16;--d:#6B3510;--b:#4A3526;--s:#6B4A32;--k:#A8460C;--w:#FFFDF8;--g:#B99352;--bg2:#F6EEDF;--head:"Palatino Linotype",Palatino,"Book Antiqua",Georgia,serif;--body:"Segoe UI",Arial,sans-serif}
+html,body{margin:0;height:100%;background:#1b1410;overflow:hidden;cursor:default}
+#stage{position:fixed;left:50%;top:50%;width:1920px;height:1080px;overflow:hidden;background:var(--bg2);transform-origin:center}
+.it{position:absolute;box-sizing:border-box}
+.mv,.par,.br{position:absolute;inset:0}
+.crop{position:absolute;inset:0;overflow:hidden}
+.crop img{position:absolute;display:block}
+.tx{position:absolute;inset:0;display:flex;flex-direction:column;white-space:pre-wrap;line-height:1.2;font-family:var(--body);color:var(--b)}
+.tx b{color:var(--k)}
+.hd{font-family:var(--head)}
+.bgimg{position:absolute;inset:0;width:100%;height:100%}
+.breathe .br{animation:breathe 16s ease-in-out infinite alternate}
+@keyframes breathe{from{transform:scale(1)}to{transform:scale(1.035)}}
+.drift .br{animation:drift 22s ease-in-out infinite alternate}
+@keyframes drift{from{transform:translateX(-18px)}to{transform:translateX(18px)}}
+#dust{position:absolute;inset:0;pointer-events:none;z-index:9000}
+#ui{position:fixed;right:18px;bottom:14px;font:13px var(--body);color:#fff9;user-select:none;z-index:5}
+#ui button{background:#0006;color:#fffc;border:0;border-radius:6px;padding:6px 10px;margin-left:4px;cursor:pointer;font:inherit}
+#hint{position:fixed;left:50%;top:14px;transform:translateX(-50%);font:14px var(--body);color:#fffb;background:#0007;padding:6px 14px;border-radius:20px;transition:opacity .6s}
+@media (prefers-reduced-motion:reduce){.breathe .br,.drift .br{animation:none}}
+</style>
+</head>
+<body>
+<div id="wrap"><div id="stage"><canvas id="dust" width="1920" height="1080"></canvas></div></div>
+<div id="ui"><span id="pos"></span><button id="fs" title="Toàn màn hình (F)">⛶</button></div>
+<div id="hint">Bấm chuột, phím → hoặc Space để chuyển · F toàn màn hình</div>
+<script>
+const DECK = {"engine": "morph", "title": "Ocean City – Style Test", "theme": {"head": "Palatino Linotype", "body": "Segoe UI", "colors": {"dk1": "0A2A3C", "dk2": "06283A", "lt1": "FFFFFF", "lt2": "03202E", "accent1": "0A4A66", "accent2": "5FE3FF", "accent3": "FFC857", "accent5": "BDEFFF"}}, "slides": [[{"id": "!!rule", "n": "rule", "box": [-416.0, 272.0, 336.0, 8.0], "crop": null, "bg": false, "k": "img", "src": "assets/_rule.png", "alt": "", "rot": 0}, {"id": "!!sub1", "n": "sub1", "box": [-840, 440, 760, 70], "crop": null, "bg": false, "k": "text", "text": "Safe Below, Free Above", "size": 36, "color": "d", "align": "l", "head": true, "bold": false, "anchor": null, "italic": true, "wrap": true, "rot": null}, {"id": "!!team", "n": "team", "box": [-840, 515, 760, 50], "crop": null, "bg": false, "k": "text", "text": "Team Ocean City · Class 11A13", "size": 20, "color": "d", "align": "l", "head": false, "bold": true, "anchor": null, "italic": false, "wrap": true, "rot": null}, {"id": "!!sub", "n": "sub", "box": [2000, 330.6, 368.0, 162.4], "crop": null, "bg": false, "k": "img", "src": "assets/sub.png", "alt": "Research submarine (Gemini illustration)", "rot": -3}, {"id": "!!bub", "n": "bub", "box": [1526.0, 1160, 208.0, 208.0], "crop": null, "bg": false, "k": "img", "src": "assets/_bubbles.png", "alt": "", "rot": 0}, {"id": "!!waves", "n": "waves", "box": [1436.0, -364.0, 608.0, 284.0], "crop": null, "bg": false, "k": "img", "src": "assets/_waves.png", "alt": "", "rot": 14}, {"id": "!!gauge", "n": "gauge", "box": [2000, 300.0, 4.8, 640.0], "crop": null, "bg": false, "k": "img", "src": "assets/_gauge.png", "alt": "", "rot": 0}, {"id": "!!marker", "n": "marker", "box": [2000, 128.6, 30.4, 30.4], "crop": null, "bg": false, "k": "img", "src": "assets/_marker.png", "alt": "", "rot": 0}, {"id": "!!dlabel", "n": "dlabel", "box": [2000, 118, 140, 44], "crop": null, "bg": false, "k": "text", "text": "0 m", "size": 14, "color": "k", "align": "r", "head": false, "bold": true, "anchor": null, "italic": false, "wrap": true, "rot": null}], [{"id": "!!bgPano", "n": "bgPano", "box": [0, 0, 1920, 2696], "crop": null, "bg": true, "k": "img", "src": "assets/pano.jpg", "alt": "Ocean panorama (Gemini illustration)", "rot": 0}, {"id": "!!eb_OCEANCI", "n": "eb_OCEANCI", "box": [120, 70, 780, 50], "crop": null, "bg": false, "k": "text", "text": "STEAM MEGA‑PROJECT · UNIT 3", "size": 18, "color": "t", "align": "l", "head": false, "bold": true, "anchor": null, "italic": false, "wrap": true, "rot": null}, {"id": "!!t_OCEANCI", "n": "t_OCEANCI", "box": [120, 115, 780, 150], "crop": null, "bg": false, "k": "text", "text": "OCEAN CITY", "size": 56, "color": "d", "align": "l", "head": true, "bold": true, "anchor": null, "italic": false, "wrap": false, "rot": null}, {"id": "!!rule", "n": "rule", "box": [120, 270, 420, 10], "crop": null, "bg": false, "k": "img", "src": "assets/_rule.png", "alt": "", "rot": 0}, {"id": "!!sub1", "n": "sub1", "box": [120, 440, 760, 70], "crop": null, "bg": false, "k": "text", "text": "Safe Below, Free Above", "size": 36, "color": "d", "align": "l", "head": true, "bold": false, "anchor": null, "italic": true, "wrap": true, "rot": null}, {"id": "!!team", "n": "team", "box": [120, 515, 760, 50], "crop": null, "bg": false, "k": "text", "text": "Team Ocean City · Class 11A13", "size": 20, "color": "d", "align": "l", "head": false, "bold": true, "anchor": null, "italic": false, "wrap": true, "rot": null}, {"id": "!!sub", "n": "sub", "box": [1290, 290, 460, 203], "crop": null, "bg": false, "k": "img", "src": "assets/sub.png", "alt": "Research submarine (Gemini illustration)", "rot": -3}, {"id": "!!bub", "n": "bub", "box": [1500, 650, 260, 260], "crop": null, "bg": false, "k": "img", "src": "assets/_bubbles.png", "alt": "", "rot": 0}, {"id": "!!waves", "n": "waves", "box": [1360, 830, 760, 355], "crop": null, "bg": false, "k": "img", "src": "assets/_waves.png", "alt": "", "rot": 14}, {"id": "!!gauge", "n": "gauge", "box": [1868, 140, 6, 800], "crop": null, "bg": false, "k": "img", "src": "assets/_gauge.png", "alt": "", "rot": 0}, {"id": "!!marker", "n": "marker", "box": [1852, 121, 38, 38], "crop": null, "bg": false, "k": "img", "src": "assets/_marker.png", "alt": "", "rot": 0}, {"id": "!!dlabel", "n": "dlabel", "box": [1700, 118, 140, 44], "crop": null, "bg": false, "k": "text", "text": "0 m", "size": 14, "color": "k", "align": "r", "head": false, "bold": true, "anchor": null, "italic": false, "wrap": true, "rot": null}, {"id": "!!q2", "n": "q2", "box": [120, 1160, 700, 210], "crop": null, "bg": false, "k": "quote", "src": "assets/_glass.png", "text": "“It does not fight nature.\nIt lives together with it.”", "size": 26, "color": "w", "align": "l", "pad": 44, "rot": 0}], [{"id": "!!bgPano", "n": "bgPano", "box": [-80, -1600, 3072, 4314], "crop": null, "bg": true, "k": "img", "src": "assets/pano.jpg", "alt": "Ocean panorama (Gemini illustration)", "rot": 0}, {"id": "!!eb_OCEANCI", "n": "eb_OCEANCI", "box": [120, -130, 780, 50], "crop": null, "bg": false, "k": "text", "text": "STEAM MEGA‑PROJECT · UNIT 3", "size": 18, "color": "t", "align": "l", "head": false, "bold": true, "anchor": null, "italic": false, "wrap": true, "rot": null}, {"id": "!!t_OCEANCI", "n": "t_OCEANCI", "box": [120, -230, 780, 150], "crop": null, "bg": false, "k": "text", "text": "OCEAN CITY", "size": 56, "color": "d", "align": "l", "head": true, "bold": true, "anchor": null, "italic": false, "wrap": false, "rot": null}, {"id": "!!sub1", "n": "sub1", "box": [-840, 440, 760, 70], "crop": null, "bg": false, "k": "text", "text": "Safe Below, Free Above", "size": 36, "color": "d", "align": "l", "head": true, "bold": false, "anchor": null, "italic": true, "wrap": true, "rot": null}, {"id": "!!team", "n": "team", "box": [-840, 515, 760, 50], "crop": null, "bg": false, "k": "text", "text": "Team Ocean City · Class 11A13", "size": 20, "color": "d", "align": "l", "head": false, "bold": true, "anchor": null, "italic": false, "wrap": true, "rot": null}, {"id": "!!eb_Divingt", "n": "eb_Divingt", "box": [120, 220, 760, 50], "crop": null, "bg": false, "k": "text", "text": "THE DIVE", "size": 18, "color": "k", "align": "l", "head": false, "bold": true, "anchor": null, "italic": false, "wrap": true, "rot": null}, {"id": "!!t_Divingt", "n": "t_Divingt", "box": [120, 265, 760, 150], "crop": null, "bg": false, "k": "text", "text": "Diving to 200 m", "size": 50, "color": "w", "align": "l", "head": true, "bold": true, "anchor": null, "italic": false, "wrap": false, "rot": null}, {"id": "!!rule", "n": "rule", "box": [120, 420, 420, 10], "crop": null, "bg": false, "k": "img", "src": "assets/_rule.png", "alt": "", "rot": 0}, {"id": "!!q2", "n": "q2", "box": [120, 520, 700, 210], "crop": null, "bg": false, "k": "quote", "src": "assets/_glass.png", "text": "“It does not fight nature.\nIt lives together with it.”", "size": 26, "color": "w", "align": "l", "pad": 44, "rot": 0}, {"id": "!!sub", "n": "sub", "box": [900, 330, 400, 177], "crop": null, "bg": false, "k": "img", "src": "assets/sub.png", "alt": "Research submarine (Gemini illustration)", "rot": 16}, {"id": "!!bub", "n": "bub", "box": [1180, 720, 260, 260], "crop": null, "bg": false, "k": "img", "src": "assets/_bubbles.png", "alt": "", "rot": 0}, {"id": "!!waves", "n": "waves", "box": [-200, -70, 760, 355], "crop": null, "bg": false, "k": "img", "src": "assets/_waves.png", "alt": "", "rot": 14}, {"id": "!!gauge", "n": "gauge", "box": [1868, 140, 6, 800], "crop": null, "bg": false, "k": "img", "src": "assets/_gauge.png", "alt": "", "rot": 0}, {"id": "!!marker", "n": "marker", "box": [1852, 361, 38, 38], "crop": null, "bg": false, "k": "img", "src": "assets/_marker.png", "alt": "", "rot": 0}, {"id": "!!dlabel", "n": "dlabel", "box": [1700, 358, 140, 44], "crop": null, "bg": false, "k": "text", "text": "60 m", "size": 14, "color": "k", "align": "r", "head": false, "bold": true, "anchor": null, "italic": false, "wrap": true, "rot": null}, {"id": "!!s3", "n": "s3", "box": [-840, 290, 760, 60], "crop": null, "bg": false, "k": "text", "text": "A liveable home for 50,000 people.", "size": 24, "color": "s", "align": "l", "head": false, "bold": false, "anchor": null, "italic": false, "wrap": true, "rot": null}], [{"id": "!!bgPano", "n": "bgPano", "box": [-502, -2480, 2880, 4044], "crop": null, "bg": true, "k": "img", "src": "assets/pano.jpg", "alt": "Ocean panorama (Gemini illustration)", "rot": 0}, {"id": "!!eb_Divingt", "n": "eb_Divingt", "box": [120, -130, 760, 50], "crop": null, "bg": false, "k": "text", "text": "THE DIVE", "size": 18, "color": "k", "align": "l", "head": false, "bold": true, "anchor": null, "italic": false, "wrap": true, "rot": null}, {"id": "!!t_Divingt", "n": "t_Divingt", "box": [120, -230, 760, 150], "crop": null, "bg": false, "k": "text", "text": "Diving to 200 m", "size": 50, "color": "w", "align": "l", "head": true, "bold": true, "anchor": null, "italic": false, "wrap": false, "rot": null}, {"id": "!!q2", "n": "q2", "box": [120, 1160, 700, 210], "crop": null, "bg": false, "k": "quote", "src": "assets/_glass.png", "text": "“It does not fight nature.\nIt lives together with it.”", "size": 26, "color": "w", "align": "l", "pad": 44, "rot": 0}, {"id": "!!eb_Welcome", "n": "eb_Welcome", "box": [120, 70, 780, 50], "crop": null, "bg": false, "k": "text", "text": "200 M BELOW THE SEA", "size": 18, "color": "k", "align": "l", "head": false, "bold": true, "anchor": null, "italic": false, "wrap": true, "rot": null}, {"id": "!!t_Welcome", "n": "t_Welcome", "box": [120, 115, 780, 150], "crop": null, "bg": false, "k": "text", "text": "Welcome to Ocean City", "size": 34, "color": "w", "align": "l", "head": true, "bold": true, "anchor": null, "italic": false, "wrap": false, "rot": null}, {"id": "!!rule", "n": "rule", "box": [120, 270, 420, 10], "crop": null, "bg": false, "k": "img", "src": "assets/_rule.png", "alt": "", "rot": 0}, {"id": "!!s3", "n": "s3", "box": [120, 290, 760, 60], "crop": null, "bg": false, "k": "text", "text": "A liveable home for 50,000 people.", "size": 24, "color": "s", "align": "l", "head": false, "bold": false, "anchor": null, "italic": false, "wrap": true, "rot": null}, {"id": "!!sub", "n": "sub", "box": [1380, 300, 360, 159], "crop": null, "bg": false, "k": "img", "src": "assets/sub.png", "alt": "Research submarine (Gemini illustration)", "rot": -8}, {"id": "!!bub", "n": "bub", "box": [80, 760, 240, 240], "crop": null, "bg": false, "k": "img", "src": "assets/_bubbles.png", "alt": "", "rot": 0}, {"id": "!!waves", "n": "waves", "box": [1360, -90, 760, 355], "crop": null, "bg": false, "k": "img", "src": "assets/_waves.png", "alt": "", "rot": -14}, {"id": "!!gauge", "n": "gauge", "box": [1868, 140, 6, 800], "crop": null, "bg": false, "k": "img", "src": "assets/_gauge.png", "alt": "", "rot": 0}, {"id": "!!marker", "n": "marker", "box": [1852, 921, 38, 38], "crop": null, "bg": false, "k": "img", "src": "assets/_marker.png", "alt": "", "rot": 0}, {"id": "!!dlabel", "n": "dlabel", "box": [1700, 918, 140, 44], "crop": null, "bg": false, "k": "text", "text": "200 m", "size": 14, "color": "k", "align": "r", "head": false, "bold": true, "anchor": null, "italic": false, "wrap": true, "rot": null}, {"id": "!!big4", "n": "big4", "box": [2000, 192.0, 944.0, 928.0], "crop": null, "bg": false, "k": "img", "src": "assets/_fade_dome_cut_left.png", "alt": "Dome cross-section (AI illustration)", "rot": 0}, {"id": "!!b4", "n": "b4", "box": [-740, 380, 660, 260], "crop": null, "bg": false, "k": "text", "text": "Two titanium shells spread **21 atm** of water pressure evenly. Inside, the air stays at **1 atm**. **8 sealed sections:** if one leaks, residents move next door.", "size": 23, "color": "w", "align": "l", "head": false, "bold": false, "anchor": null, "italic": false, "wrap": true, "rot": null}, {"id": "!!cap4", "n": "cap4", "box": [2000, 1010, 760, 40], "crop": null, "bg": false, "k": "text", "text": "Dome cross‑section (AI illustration)", "size": 14, "color": "s", "align": "r", "head": false, "bold": false, "anchor": null, "italic": false, "wrap": true, "rot": null}, {"id": "!!coralF", "n": "coralF", "box": [-88.0, 1160, 576.0, 346.8], "crop": null, "bg": false, "k": "img", "src": "assets/coralF.png", "alt": "", "rot": 0}, {"id": "!!bubbles3_0", "n": "sweep", "box": [300, 1200, 900, 900], "crop": null, "bg": false, "k": "img", "src": "assets/_bubbles.png", "alt": "", "rot": 0}, {"id": "!!bubbles3_1", "n": "sweep", "box": [1000, 1500, 1100, 1100], "crop": null, "bg": false, "k": "img", "src": "assets/_bubbles.png", "alt": "", "rot": 0}, {"id": "!!bubbles3_2", "n": "sweep", "box": [-200, 1800, 800, 800], "crop": null, "bg": false, "k": "img", "src": "assets/_bubbles.png", "alt": "", "rot": 0}], [{"id": "!!bgPano", "n": "bgPano", "box": [0, -1350, 1920, 2696], "crop": null, "bg": true, "k": "img", "src": "assets/pano.jpg", "alt": "Ocean panorama (Gemini illustration)", "rot": 0}, {"id": "!!eb_Welcome", "n": "eb_Welcome", "box": [120, -130, 780, 50], "crop": null, "bg": false, "k": "text", "text": "200 M BELOW THE SEA", "size": 18, "color": "k", "align": "l", "head": false, "bold": true, "anchor": null, "italic": false, "wrap": true, "rot": null}, {"id": "!!t_Welcome", "n": "t_Welcome", "box": [120, -230, 780, 150], "crop": null, "bg": false, "k": "text", "text": "Welcome to Ocean City", "size": 34, "color": "w", "align": "l", "head": true, "bold": true, "anchor": null, "italic": false, "wrap": false, "rot": null}, {"id": "!!s3", "n": "s3", "box": [120, -140, 760, 60], "crop": null, "bg": false, "k": "text", "text": "A liveable home for 50,000 people.", "size": 24, "color": "s", "align": "l", "head": false, "bold": false, "anchor": null, "italic": false, "wrap": true, "rot": null}, {"id": "!!bub", "n": "bub", "box": [80, -320, 240, 240], "crop": null, "bg": false, "k": "img", "src": "assets/_bubbles.png", "alt": "", "rot": 0}, {"id": "!!big4", "n": "big4", "box": [820, -40, 1180, 1160], "crop": null, "bg": false, "k": "img", "src": "assets/_fade_dome_cut_left.png", "alt": "Dome cross-section (AI illustration)", "rot": 0}, {"id": "!!eb_Pressure", "n": "eb_Pressure", "box": [120, 140, 760, 50], "crop": null, "bg": false, "k": "text", "text": "BREAKTHROUGH 01", "size": 18, "color": "k", "align": "l", "head": false, "bold": true, "anchor": null, "italic": false, "wrap": true, "rot": null}, {"id": "!!t_Pressure", "n": "t_Pressure", "box": [120, 185, 760, 150], "crop": null, "bg": false, "k": "text", "text": "Pressure‑Shield Bio‑Dome", "size": 30, "color": "w", "align": "l", "head": true, "bold": true, "anchor": null, "italic": false, "wrap": false, "rot": null}, {"id": "!!rule", "n": "rule", "box": [120, 340, 420, 10], "crop": null, "bg": false, "k": "img", "src": "assets/_rule.png", "alt": "", "rot": 0}, {"id": "!!b4", "n": "b4", "box": [120, 380, 660, 260], "crop": null, "bg": false, "k": "text", "text": "Two titanium shells spread **21 atm** of water pressure evenly. Inside, the air stays at **1 atm**. **8 sealed sections:** if one leaks, residents move next door.", "size": 23, "color": "w", "align": "l", "head": false, "bold": false, "anchor": null, "italic": false, "wrap": true, "rot": null}, {"id": "!!cap4", "n": "cap4", "box": [1000, 1010, 760, 40], "crop": null, "bg": false, "k": "text", "text": "Dome cross‑section (AI illustration)", "size": 14, "color": "s", "align": "r", "head": false, "bold": false, "anchor": null, "italic": false, "wrap": true, "rot": null}, {"id": "!!sub", "n": "sub", "box": [760, 690, 330, 146], "crop": null, "bg": false, "k": "img", "src": "assets/sub.png", "alt": "Research submarine (Gemini illustration)", "rot": 4}, {"id": "!!coralF", "n": "coralF", "box": [-160.0, 700.4, 720.0, 433.6], "crop": null, "bg": false, "k": "img", "src": "assets/coralF.png", "alt": "", "rot": 0}, {"id": "!!waves", "n": "waves", "box": [-200, -70, 760, 355], "crop": null, "bg": false, "k": "img", "src": "assets/_waves.png", "alt": "", "rot": 14}, {"id": "!!gauge", "n": "gauge", "box": [1868, 140, 6, 800], "crop": null, "bg": false, "k": "img", "src": "assets/_gauge.png", "alt": "", "rot": 0}, {"id": "!!marker", "n": "marker", "box": [1852, 721, 38, 38], "crop": null, "bg": false, "k": "img", "src": "assets/_marker.png", "alt": "", "rot": 0}, {"id": "!!dlabel", "n": "dlabel", "box": [1700, 718, 140, 44], "crop": null, "bg": false, "k": "text", "text": "150 m", "size": 14, "color": "k", "align": "r", "head": false, "bold": true, "anchor": null, "italic": false, "wrap": true, "rot": null}, {"id": "!!s5", "n": "s5", "box": [-1080, 830, 1000, 60], "crop": null, "bg": false, "k": "text", "text": "Scan the buoy to explore our 3D model.", "size": 24, "color": "d", "align": "l", "head": false, "bold": false, "anchor": null, "italic": false, "wrap": true, "rot": null}, {"id": "!!qr", "n": "qr", "box": [278.5, -212.0, 132.0, 132.0], "crop": null, "bg": false, "k": "img", "src": "assets/qr_3d.png", "alt": "", "rot": 0}, {"id": "!!buoy", "n": "buoy", "box": [269.6, -344.0, 150.9, 264.0], "crop": null, "bg": false, "k": "img", "src": "assets/_buoy.png", "alt": "Buoy", "rot": 0}, {"id": "!!bubbles3_0", "n": "sweep", "box": [200, -1000, 900, 900], "crop": null, "bg": false, "k": "img", "src": "assets/_bubbles.png", "alt": "", "rot": 0}, {"id": "!!bubbles3_1", "n": "sweep", "box": [900, -1150, 1100, 1100], "crop": null, "bg": false, "k": "img", "src": "assets/_bubbles.png", "alt": "", "rot": 0}, {"id": "!!bubbles3_2", "n": "sweep", "box": [-100, -900, 800, 800], "crop": null, "bg": false, "k": "img", "src": "assets/_bubbles.png", "alt": "", "rot": 0}], [{"id": "!!bgPano", "n": "bgPano", "box": [-115, -67, 2151, 3020], "crop": null, "bg": true, "k": "img", "src": "assets/pano.jpg", "alt": "Ocean panorama (Gemini illustration)", "rot": 0}, {"id": "!!big4", "n": "big4", "box": [2000, -40, 1180, 1160], "crop": null, "bg": false, "k": "img", "src": "assets/_fade_dome_cut_left.png", "alt": "Dome cross-section (AI illustration)", "rot": 0}, {"id": "!!eb_Pressure", "n": "eb_Pressure", "box": [120, -130, 760, 50], "crop": null, "bg": false, "k": "text", "text": "BREAKTHROUGH 01", "size": 18, "color": "k", "align": "l", "head": false, "bold": true, "anchor": null, "italic": false, "wrap": true, "rot": null}, {"id": "!!t_Pressure", "n": "t_Pressure", "box": [120, -230, 760, 150], "crop": null, "bg": false, "k": "text", "text": "Pressure‑Shield Bio‑Dome", "size": 30, "color": "w", "align": "l", "head": true, "bold": true, "anchor": null, "italic": false, "wrap": false, "rot": null}, {"id": "!!b4", "n": "b4", "box": [-740, 380, 660, 260], "crop": null, "bg": false, "k": "text", "text": "Two titanium shells spread **21 atm** of water pressure evenly. Inside, the air stays at **1 atm**. **8 sealed sections:** if one leaks, residents move next door.", "size": 23, "color": "w", "align": "l", "head": false, "bold": false, "anchor": null, "italic": false, "wrap": true, "rot": null}, {"id": "!!cap4", "n": "cap4", "box": [2000, 1010, 760, 40], "crop": null, "bg": false, "k": "text", "text": "Dome cross‑section (AI illustration)", "size": 14, "color": "s", "align": "r", "head": false, "bold": false, "anchor": null, "italic": false, "wrap": true, "rot": null}, {"id": "!!eb_BePart", "n": "eb_BePart", "box": [120, 600, 1100, 50], "crop": null, "bg": false, "k": "text", "text": "JOIN US", "size": 18, "color": "d", "align": "l", "head": false, "bold": true, "anchor": null, "italic": false, "wrap": true, "rot": null}, {"id": "!!t_BePart", "n": "t_BePart", "box": [120, 645, 1100, 150], "crop": null, "bg": false, "k": "text", "text": "Be Part of the City Beneath the Waves", "size": 30, "color": "d", "align": "l", "head": true, "bold": true, "anchor": null, "italic": false, "wrap": false, "rot": null}, {"id": "!!rule", "n": "rule", "box": [120, 800, 420, 10], "crop": null, "bg": false, "k": "img", "src": "assets/_rule.png", "alt": "", "rot": 0}, {"id": "!!s5", "n": "s5", "box": [120, 830, 1000, 60], "crop": null, "bg": false, "k": "text", "text": "Scan the buoy to explore our 3D model.", "size": 24, "color": "d", "align": "l", "head": false, "bold": false, "anchor": null, "italic": false, "wrap": true, "rot": null}, {"id": "!!qr", "n": "qr", "box": [262.0, 75.0, 165.0, 165.0], "crop": null, "bg": false, "k": "img", "src": "assets/qr_3d.png", "alt": "", "rot": 0}, {"id": "!!buoy", "n": "buoy", "box": [250.7, 240.0, 188.6, 330.0], "crop": null, "bg": false, "k": "img", "src": "assets/_buoy.png", "alt": "Buoy", "rot": 0}, {"id": "!!sub", "n": "sub", "box": [1320, 300, 460, 203], "crop": null, "bg": false, "k": "img", "src": "assets/sub.png", "alt": "Research submarine (Gemini illustration)", "rot": -6}, {"id": "!!coralF", "n": "coralF", "box": [1300.0, 760.4, 720.0, 433.6], "crop": null, "bg": false, "k": "img", "src": "assets/coralF_m.png", "alt": "", "rot": 0}, {"id": "!!waves", "n": "waves", "box": [-220, 820, 760, 355], "crop": null, "bg": false, "k": "img", "src": "assets/_waves.png", "alt": "", "rot": -14}, {"id": "!!gauge", "n": "gauge", "box": [1868, 140, 6, 800], "crop": null, "bg": false, "k": "img", "src": "assets/_gauge.png", "alt": "", "rot": 0}, {"id": "!!marker", "n": "marker", "box": [1852, 121, 38, 38], "crop": null, "bg": false, "k": "img", "src": "assets/_marker.png", "alt": "", "rot": 0}, {"id": "!!dlabel", "n": "dlabel", "box": [1700, 118, 140, 44], "crop": null, "bg": false, "k": "text", "text": "0 m", "size": 14, "color": "k", "align": "r", "head": false, "bold": true, "anchor": null, "italic": false, "wrap": true, "rot": null}]], "fog": "assets/_fog.png"};
+const stage = document.getElementById('stage'), dust = document.getElementById('dust');
+const reduce = matchMedia('(prefers-reduced-motion: reduce)').matches;
+const MS = reduce ? .35 : 1;
+let cur = -1, busy = false, live = new Map();
+
+(function theme(){
+  const c = (DECK.theme && DECK.theme.colors) || {}, r = document.documentElement.style;
+  const map = {t:'accent1', d:'dk2', b:'dk1', s:'accent5', k:'accent2', w:'lt1', g:'accent3', bg2:'lt2'};
+  for (const k in map) if (c[map[k]]) r.setProperty('--' + k, '#' + c[map[k]]);
+  if (DECK.theme && DECK.theme.head) r.setProperty('--head', `"${DECK.theme.head}",Georgia,serif`);
+  if (DECK.theme && DECK.theme.body) r.setProperty('--body', `"${DECK.theme.body}",Arial,sans-serif`);
+  if (DECK.bg) stage.style.background = `url(${DECK.bg}) center/cover`;
+})();
+
+function fit(){ const k = Math.min(innerWidth/1920, innerHeight/1080); stage.style.transform = `translate(-50%,-50%) scale(${k})`; }
+addEventListener('resize', fit); fit();
+
+const esc = s => String(s ?? '').replace(/&/g,'&amp;').replace(/</g,'&lt;');
+const rich = s => esc(s).split('**').map((p,i)=> i%2 ? `<b>${p}</b>` : p).join('');
+const JUST = {l:'flex-start', c:'center', r:'flex-end'}, TA = {l:'left', c:'center', r:'right'}, AN = {t:'flex-start', m:'center', b:'flex-end'};
+function tx(s, o){
+  const d = document.createElement('div'); d.className = 'tx' + (o.head ? ' hd' : '');
+  Object.assign(d.style, {fontSize: (o.size||18)*2 + 'px', color: `var(--${o.color||'b'})`, fontWeight: o.bold ? 700 : 400,
+    fontStyle: o.italic ? 'italic' : 'normal', textAlign: TA[o.align||'c'], justifyContent: AN[o.anchor||'m'],
+    left: (o.x||0)+'px', top: (o.y||0)+'px', width: o.w ? o.w+'px' : '100%', height: o.h ? o.h+'px' : '100%', whiteSpace: o.wrap===false ? 'pre' : 'pre-wrap'});
+  if (o.shadow) d.style.textShadow = '2px 2px 2px #5a3a24';
+  d.innerHTML = `<span>${rich(s)}</span>`; return d;
+}
+function img(src, alt, cls){ const i = new Image(); i.src = src; i.alt = alt||''; i.draggable = false; if (cls) i.className = cls; return i; }
+function cropStyle(el, crop){
+  const [l,t,r,b] = crop || [0,0,0,0], w = 1-l-r, h = 1-t-b;
+  Object.assign(el.style, {width: 100/w+'%', height: 100/h+'%', left: -l/w*100+'%', top: -t/h*100+'%'});
+}
+function content(e){
+  const box = document.createElement('div'); box.style.position = 'absolute'; box.style.inset = '0';
+  const [, , W, H] = e.box;
+  if (e.k === 'img'){ const c = document.createElement('div'); c.className = 'crop'; const i = img(e.src, e.alt); cropStyle(i, e.crop); c.append(i); box.append(c); }
+  else if (e.k === 'photo'){ const c = document.createElement('div'); c.className='crop'; Object.assign(c.style,{inset:'7%',borderRadius:'50%'}); const i = img(e.src, e.alt); cropStyle(i, null); i.style.objectFit='cover'; c.append(i); box.append(c, img(e.frame,'','bgimg')); }
+  else if (e.k === 'banner'){ box.append(img(e.src,'','bgimg')); const p = W*(e.curved?.16:.1); box.append(tx(e.text,{size:e.size,color:'w',head:1,bold:1,italic:1,shadow:1,x:p,y:H*.12,w:W-2*p,h:H*.72})); }
+  else if (e.k === 'quote'){ const p = e.pad ?? 45; box.append(img(e.src,'','bgimg'), tx(e.text,{size:e.size,color:e.color,align:e.align,x:p,y:22,w:W-2*p,h:H-44})); }
+  else if (e.k === 'card'){
+    box.append(img(e.src,'','bgimg'));
+    if (!e.v){ box.append(tx(e.head,{size:21,color:e.headcolor||'t',head:1,bold:1,x:45,y:28,w:W-90,h:55}), tx(e.text,{size:16,color:e.color,x:45,y:87,w:W-90,h:H-115})); }
+    else if (e.num){ box.append(tx(e.num,{size:76,color:'d',head:1,x:30,y:40,w:W-60,h:190}));
+      const ln = document.createElement('div'); Object.assign(ln.style,{position:'absolute',left:'95px',top:'248px',width:(W-190)+'px',height:'2px',background:'var(--g)'}); box.append(ln);
+      box.append(tx(e.head,{size:23,color:'s',head:1,bold:1,x:30,y:265,w:W-60,h:120})); }
+    else { box.append(tx(e.head,{size:e.headsize||25,color:e.headcolor||'t',head:1,bold:1,x:30,y:38,w:W-60,h:62}), tx(e.sub,{size:16,color:e.subcolor||'k',bold:1,x:30,y:100,w:W-60,h:44}), tx(e.text,{size:15,color:e.color,x:30,y:156,w:W-60,h:170}));
+      if (e.thumb){ const t = img(e.thumb,''); Object.assign(t.style,{position:'absolute',left:'40px',top:'340px',width:(W-80)+'px',height:(H-370)+'px',objectFit:'contain'}); box.append(t);} }
+  }
+  else if (e.k === 'title'){
+    const al = e.align||'c', sz = e.size||52, ss = e.subsize||24;
+    const tc = e.color||'t', sc = e.subcolor||'s';
+    if (!e.sub) box.append(tx(e.title,{size:sz,color:tc,head:1,bold:1,align:al,italic:e.italic}));
+    else if (e.above) box.append(tx(e.sub,{size:ss,color:sc,head:1,align:al,h:H*.36}), tx(e.title,{size:sz,color:tc,head:1,bold:1,align:al,italic:e.italic,y:H*.36,h:H*.64}));
+    else box.append(tx(e.title,{size:sz,color:tc,head:1,bold:1,align:al,italic:e.italic,h:H*.72}), tx(e.sub,{size:ss,color:sc,head:1,align:al,y:H*.72,h:H*.28}));
+  }
+  else box.append(tx(e.text, e));
+  return box;
+}
+function setBox(el, b){ Object.assign(el.style, {left:b[0]+'px', top:b[1]+'px', width:b[2]+'px', height:b[3]+'px'}); }
+function make(e, depth){
+  const it = document.createElement('div'); it.className = 'it'; it.dataset.id = e.id;
+  const mv = document.createElement('div'); mv.className = 'mv';
+  const par = document.createElement('div'); par.className = 'par';
+  const br = document.createElement('div'); br.className = 'br';
+  br.append(content(e)); par.append(br); mv.append(par); it.append(mv); setBox(it, e.box); it.style.rotate = (e.rot||0) + 'deg';
+  it._e = e; it._depth = depth;
+  const big = e.k === 'img' && !e.bg && e.box[2]*e.box[3] > 1920*1080*.12;
+  if (big) it.classList.add('breathe');
+  if (/^(cloud|fog|mist|moon)/.test(e.n)) it.classList.add('drift');
+  return it;
+}
+function depthOf(e, i, n){ return e.bg ? .12 : /^(sky|paper|wall|floor|ground|glow|bg)/.test(e.n) ? .25 : .35 + .65*i/Math.max(1,n-1); }
+function render(i){
+  for (const el of live.values()) el.remove(); live.clear();
+  const list = DECK.slides[i];
+  list.forEach((e, k) => { const el = make(e, depthOf(e, k, list.length)); stage.insertBefore(el, dust); live.set(e.id, el); });
+  cur = i; update();
+}
+function update(){
+  const n = DECK.engine === 'morph' ? DECK.slides.length - 1 : DECK.slides.length;
+  const p = DECK.engine === 'morph' ? Math.max(cur, 1) : cur + 1;
+  document.getElementById('pos').textContent = `${p} / ${n}`;
+  if (history.replaceState) history.replaceState(null, '', '#' + p);
+}
+const wait = ms => new Promise(r => setTimeout(r, ms));
+const EASE_M = 'cubic-bezier(.62,0,.24,1)';
+
+async function morphTo(j){
+  const next = DECK.slides[j], seen = new Set(), jobs = [];
+  next.forEach((e, k) => {
+    seen.add(e.id);
+    const old = live.get(e.id), depth = depthOf(e, k, next.length);
+    const dur = 1250*MS + (e.bg ? 200 : 0), delay = e.bg ? 0 : Math.min(140, k*12)*MS;
+    if (old){
+      const a = old._e.box, b = e.box;
+      const r0 = (old._e.rot||0)+'deg', r1 = (e.rot||0)+'deg';
+      jobs.push(old.animate([{left:a[0]+'px',top:a[1]+'px',width:a[2]+'px',height:a[3]+'px',rotate:r0},{left:b[0]+'px',top:b[1]+'px',width:b[2]+'px',height:b[3]+'px',rotate:r1}],{duration:dur,delay,easing:EASE_M,fill:'forwards'}).finished.then(()=>{setBox(old,b); old.style.rotate=r1; old.getAnimations().forEach(x=>x.cancel());}));
+      const im = old.querySelector('.crop img');
+      if (im && e.k === 'img' && JSON.stringify(old._e.crop) !== JSON.stringify(e.crop)){
+        const s0 = {left:im.style.left, top:im.style.top, width:im.style.width, height:im.style.height}, t = document.createElement('i'); cropStyle(t, e.crop);
+        jobs.push(im.animate([{left:s0.left,top:s0.top,width:s0.width,height:s0.height},{left:t.style.left,top:t.style.top,width:t.style.width,height:t.style.height}],{duration:dur,delay,easing:EASE_M,fill:'forwards'}).finished.then(()=>{cropStyle(im,e.crop); im.getAnimations().forEach(x=>x.cancel());}));
+      }
+      const moved = Math.hypot(b[0]-a[0], b[1]-a[1]);
+      if (moved > 700 && !e.bg) old.querySelector('.mv').animate([{filter:'blur(0)'},{filter:'blur(5px)',offset:.5},{filter:'blur(0)'}],{duration:dur,delay});
+      old._e = e; old._depth = depth;
+      stage.insertBefore(old, dust);
+    } else {
+      const el = make(e, depth); el.style.opacity = 0; stage.insertBefore(el, dust); live.set(e.id, el);
+      jobs.push(el.animate([{opacity:0, filter:'blur(6px)'},{opacity:1, filter:'blur(0)'}],{duration:dur*.9,delay:delay+dur*.1,easing:'ease-out',fill:'forwards'}).finished.then(()=>{el.style.opacity=1; el.getAnimations().forEach(x=>x.cancel());}));
+    }
+  });
+  for (const [id, el] of live) if (!seen.has(id)){
+    stage.insertBefore(el, stage.firstChild);
+    jobs.push(el.animate([{opacity:1},{opacity:0, filter:'blur(6px)'}],{duration:800*MS,easing:'ease-in',fill:'forwards'}).finished.then(()=>{el.remove(); live.delete(id);}));
+  }
+  await Promise.all(jobs); cur = j; update();
+}
+
+function fxFrames(e, phase){
+  const d = phase === 'in' ? e.i : e.o, fx = (d && 'LRTB'.includes(d)) ? e.fx : 'fade';
+  const [x, y, w, h] = e.box;
+  let from;
+  if (fx === 'peek') from = {L:`translateX(-112.5%)`, R:`translateX(112.5%)`, T:`translateY(-112.5%)`, B:`translateY(112.5%)`}[d];
+  else if (fx === 'fly') from = {L:`translateX(${-(x+w)-40}px)`, R:`translateX(${1960-x}px)`, T:`translateY(${-(y+h)-40}px)`, B:`translateY(${1120-y}px)`}[d];
+  const f = fx === 'fade' ? [{opacity:0},{opacity:1}] : [{transform:from, opacity: fx==='fly'?1:1},{transform:'none', opacity:1}];
+  return {f: phase === 'in' ? f : f.slice().reverse(), clip: fx === 'peek'};
+}
+async function peekIn(i){
+  render(i); const jobs = [];
+  for (const el of live.values()){
+    const e = el._e, {f, clip} = fxFrames(e, 'in'), mv = el.querySelector('.mv');
+    if (clip) el.style.overflow = 'hidden';
+    mv.style.opacity = 0;
+    jobs.push(mv.animate(f, {duration:e.t[1]*MS, delay:e.t[0]*MS, easing:'cubic-bezier(.2,.75,.25,1)', fill:'both'}).finished.then(()=>{mv.style.opacity=''; el.style.overflow=''; mv.getAnimations().forEach(x=>x.cancel());}));
+  }
+  await Promise.all(jobs);
+}
+async function peekOut(){
+  const els = [...live.values()], texts = els.filter(el => el._e.fx==='peek' && !/^(banner|photo|frame|name|thanks|eyebrow)/.test(el._e.n));
+  const jobs = els.map(el => {
+    const e = el._e, {f, clip} = fxFrames(e, 'out'), mv = el.querySelector('.mv');
+    let delay = 0, dur = 550;
+    if (texts.includes(el)){ delay = 30*(texts.length-1-texts.indexOf(el)); dur = 500; }
+    else if (/^(hero|pavilion|photo|frame)/.test(e.n)){ delay = 100; dur = 600; }
+    if (clip) el.style.overflow = 'hidden';
+    return mv.animate(f, {duration:dur*MS, delay:delay*MS, easing:'cubic-bezier(.55,0,.8,.3)', fill:'forwards'}).finished;
+  });
+  await Promise.all(jobs); await wait(100*MS);
+}
+
+async function go(j){
+  if (busy || j < 0 || j >= DECK.slides.length || j === cur) return;
+  busy = true;
+  try {
+    if (DECK.engine === 'morph'){
+      if (j === cur + 1) await morphTo(j); else render(j);
+    } else {
+      if (j === cur + 1){ await peekOut(); await peekIn(j); } else render(j);
+    }
+  } finally { busy = false; }
+}
+const next = () => go(cur + 1), prev = () => go(cur - 1);
+addEventListener('keydown', ev => {
+  if (['ArrowRight','PageDown',' ','Enter'].includes(ev.key)){ ev.preventDefault(); next(); }
+  else if (['ArrowLeft','PageUp','Backspace'].includes(ev.key)){ ev.preventDefault(); prev(); }
+  else if (ev.key === 'Home') go(DECK.engine === 'morph' ? 1 : 0);
+  else if (ev.key === 'f' || ev.key === 'F') toggleFs();
+});
+stage.addEventListener('click', next);
+function toggleFs(){ document.fullscreenElement ? document.exitFullscreen() : document.documentElement.requestFullscreen().catch(()=>{}); }
+document.getElementById('fs').onclick = e => { e.stopPropagation(); toggleFs(); };
+setTimeout(() => document.getElementById('hint').style.opacity = 0, 3000);
+addEventListener('keydown', () => document.getElementById('hint').style.opacity = 0, {once: true});
+
+// parallax: layers drift against the pointer, deeper layers less
+let px = 0, py = 0, tx_ = 0, ty_ = 0;
+addEventListener('pointermove', e => { px = e.clientX/innerWidth - .5; py = e.clientY/innerHeight - .5; });
+(function loop(){
+  tx_ += (px - tx_)*.06; ty_ += (py - ty_)*.06;
+  if (!reduce) for (const el of live.values()){ const k = el._depth*28; el.querySelector('.par').style.transform = `translate(${-tx_*k}px,${-ty_*k}px)`; }
+  requestAnimationFrame(loop);
+})();
+
+// floating gold dust
+(function(){
+  const g = dust.getContext('2d'), P = Array.from({length: reduce ? 0 : 70}, () => ({x:Math.random()*1920, y:Math.random()*1080, r:.6+Math.random()*2.2, v:.15+Math.random()*.45, a:Math.random()*6.28}));
+  (function f(){
+    g.clearRect(0,0,1920,1080);
+    for (const p of P){ p.y -= p.v; p.a += .01; p.x += Math.sin(p.a)*.3; if (p.y < -10){ p.y = 1090; p.x = Math.random()*1920; }
+      const al = .25 + .35*Math.sin(p.a*2)**2; g.fillStyle = `rgba(232,190,110,${al})`; g.beginPath(); g.arc(p.x,p.y,p.r,0,6.28); g.fill(); }
+    requestAnimationFrame(f);
+  })();
+})();
+
+const start = parseInt(location.hash.slice(1)) || 0;
+const auto = parseFloat(new URLSearchParams(location.search).get('auto'));
+if (DECK.engine === 'morph'){
+  if (start > 1) render(start); else { render(0); setTimeout(() => go(1), 250); }
+} else { if (start > 1) render(start - 1); else peekIn(0); }
+if (auto > 0) setInterval(() => { if (!busy) { if (cur < DECK.slides.length - 1) next(); } }, auto*1000);
+window.deck = {go, next, prev, get cur(){return cur}, get busy(){return busy}, count: DECK.slides.length, engine: DECK.engine};
+</script>
+</body>
+</html>

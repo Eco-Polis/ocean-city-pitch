@@ -11,3 +11,9 @@ STEAM Mega-Project · Unit 3 Future Cities · Team Ocean City, Class 11A13
 ![Preview](preview.png)
 
 Hình ảnh: render từ mô hình 3D của nhóm và một số ảnh minh họa tạo bằng AI (phố ngập, mặt cắt mái vòm, trạm OTEC, phòng điều khiển). Số liệu là ước tính của nhóm.
+
+## Bản thử phong cách (5 slide)
+
+Xem: https://eco-polis.github.io/ocean-city-pitch/test/ · File: [test/Ocean-City-TEST.pptx](test/Ocean-City-TEST.pptx)
+
+Ảnh nền, tàu ngầm và san hô ở bản thử là ảnh minh họa tạo bằng Gemini.
